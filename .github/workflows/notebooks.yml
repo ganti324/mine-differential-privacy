@@ -1,0 +1,25 @@
+name: Notebooks Lint
+
+on:
+  push:
+    paths:
+      - 'notebooks/**'
+  pull_request:
+    paths:
+      - 'notebooks/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    - name: Install dependencies
+      run: |
+        pip install nbformat
+    - name: Validate Notebooks
+      run: |
+        python -c "import nbformat, glob, sys; [nbformat.read(f, as_version=4) for f in glob.glob('notebooks/*.ipynb')]"
